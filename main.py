@@ -119,7 +119,7 @@ def main():
                 menus.pause()
             constants.disp_win.blit(constants.menu_surface, (0, 0))
             pygame.display.update()
-    json.dump(common.Settings, open("settings", "w"), indent=4)
+    json.dump(common.Settings, open("settings.json", "w"), indent=4)
     info("Game quit without errors")
     pygame.quit()
 

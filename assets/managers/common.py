@@ -59,8 +59,8 @@ def ReloadSettings():
     global Settings
     global Keybinds
 
-    if not os.path.exists("settings"):
-        truefile = open("settings", "x")
+    if not os.path.exists("settings.json"):
+        truefile = open("settings.json", "x")
         truefile.close()
         truefile = pathlib.Path("settings")
         truefile.write_text(json.dumps(constants.DEF_SETTINGS, indent=4))
