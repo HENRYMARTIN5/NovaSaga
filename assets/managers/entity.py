@@ -8,20 +8,21 @@ import pathlib
 import pygame
 import math
 import time
+from util.logging import *
 
 
 class Entity():
-    def apply_pallet(self, surface, pallet):
+    def apply_palette(self, surface, palette):
         arr = pygame.PixelArray(surface)
-        arr.replace((128, 0, 0), pallet.get_at((0, 0)))
-        arr.replace((255, 0, 0), pallet.get_at((1, 0)))
-        arr.replace((255, 128, 0), pallet.get_at((2, 0)))
-        arr.replace((255, 255, 0), pallet.get_at((3, 0)))
-        arr.replace((128, 128, 0), pallet.get_at((4, 0)))
-        arr.replace((0, 128, 0), pallet.get_at((5, 0)))
-        arr.replace((0, 255, 0), pallet.get_at((6, 0)))
-        arr.replace((0, 255, 128), pallet.get_at((7, 0)))
-        arr.replace((0, 128, 128), pallet.get_at((8, 0)))
+        arr.replace((128, 0, 0), palette.get_at((0, 0)))
+        arr.replace((255, 0, 0), palette.get_at((1, 0)))
+        arr.replace((255, 128, 0), palette.get_at((2, 0)))
+        arr.replace((255, 255, 0), palette.get_at((3, 0)))
+        arr.replace((128, 128, 0), palette.get_at((4, 0)))
+        arr.replace((0, 128, 0), palette.get_at((5, 0)))
+        arr.replace((0, 255, 0), palette.get_at((6, 0)))
+        arr.replace((0, 255, 128), palette.get_at((7, 0)))
+        arr.replace((0, 128, 128), palette.get_at((8, 0)))
         arr.close()
         return surface
 
@@ -82,23 +83,29 @@ class Entity():
         self.grounded = True
         self.hitbox = pygame.Rect(-constants.HALF_BLOCK_SIZE, -
                                   constants.HALF_BLOCK_SIZE, constants.BLOCK_SIZE, constants.BLOCK_SIZE)
+
         if AItype == "simple":
             self.AIpointer = ai.simple
             self.Animation = animation.simple
+
         if AItype == "player":
             self.AIpointer = ai.playerAI
             self.Animation = animation.player_anim
             self.name = "nova"
+
         if AItype == "mite":
             self.AIpointer = ai.mite
             self.Animation = animation.simple
             self.name = "mite"
+        
         for i in os.listdir(constants.PORTRAIT_PATH):
             item = i.split("-", 1)
             if item[0] == self.name:
                 self.portraits.update({item[1].split(".", 1)[0]: pygame.transform.scale(pygame.image.load(
                     os.path.join(constants.PORTRAIT_PATH, i)), (32*constants.screen_scale, 32*constants.screen_scale))})
-        print(self.portraits)
+
+        debug("Portraits: " + str(self.portraits))
+
         self.overlay_active = False
         self.xp = xp
         self.overlay = common.loaded_level.camera_surface.copy()
@@ -106,30 +113,33 @@ class Entity():
             self.overlay, (self.overlay.get_width()*3, self.overlay.get_height()*3))
         self.overlay.set_alpha(96)
         self.overlay.fill((0, 0, 0))
+
         pygame.draw.circle(self.overlay, (24, 24, 24), (self.overlay.get_width(
         )/2, self.overlay.get_height()/2), 128)
         pygame.draw.circle(self.overlay, (40, 40, 40), (self.overlay.get_width(
         )/2, self.overlay.get_height()/2), 64)
         pygame.draw.circle(self.overlay, (64, 64, 64), (self.overlay.get_width(
         )/2, self.overlay.get_height()/2), 32)
-        self.pallet = pygame.image.load(
-            os.path.join(self.texture_path, "pallet.png"))
-        self.still_anim = self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "still.png")), self.pallet)
-        self.walking_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "walking1.png")), self.pallet))
-        self.walking_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "walking2.png")), self.pallet))
-        self.walking_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "walking3.png")), self.pallet))
-        self.walking_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "walking4.png")), self.pallet))
-        self.walking_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "walking5.png")), self.pallet))
-        self.falling_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "falling1.png")), self.pallet))
-        self.falling_anim.append(self.apply_pallet(pygame.image.load(
-            os.path.join(self.texture_path, "falling2.png")), self.pallet))
+        
+        self.palette = pygame.image.load(
+            os.path.join(self.texture_path, "palette.png"))
+        self.still_anim = self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "still.png")), self.palette)
+        self.walking_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "walking1.png")), self.palette))
+        self.walking_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "walking2.png")), self.palette))
+        self.walking_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "walking3.png")), self.palette))
+        self.walking_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "walking4.png")), self.palette))
+        self.walking_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "walking5.png")), self.palette))
+        self.falling_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "falling1.png")), self.palette))
+        self.falling_anim.append(self.apply_palette(pygame.image.load(
+            os.path.join(self.texture_path, "falling2.png")), self.palette))
+
         if self.ai_type == "player":
             self.text_color = constants.CHAR_COLORS["nova"]
             self.animation_ticks.threshold = 35
@@ -140,90 +150,108 @@ class Entity():
                 constants.PORTRAIT_PATH, "nova-neutral.png")), (32*constants.screen_scale, 32*constants.screen_scale))})
             self.portraits.update({"sad": pygame.transform.scale(pygame.image.load(os.path.join(
                 constants.PORTRAIT_PATH, "nova-sad.png")), (32*constants.screen_scale, 32*constants.screen_scale))})
+
             for i in range(constants.INV_WIDTH*constants.INV_HEIGHT-1):
                 self.inventory.update({"inv_"+str(i): None})
+
             self.facing_away = False
-            self.facing_away_img = self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "away_still.png")), self.pallet)
+            self.facing_away_img = self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "away_still.png")), self.palette)
             self.arm_anim = []
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm1.png")), self.pallet))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm1.png")), self.palette))
             self.arm_anim[0] = pygame.transform.scale(self.arm_anim[0], (self.arm_anim[0].get_width(
             )*constants.screen_scale, self.arm_anim[0].get_height()*constants.screen_scale))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm2.png")), self.pallet))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm3.png")), self.pallet))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm4.png")), self.pallet))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm5.png")), self.pallet))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm6.png")), self.pallet))
-            self.arm_anim.append(self.apply_pallet(pygame.image.load(
-                os.path.join(self.texture_path, "arm7.png")), self.pallet))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm2.png")), self.palette))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm3.png")), self.palette))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm4.png")), self.palette))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm5.png")), self.palette))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm6.png")), self.palette))
+            self.arm_anim.append(self.apply_palette(pygame.image.load(
+                os.path.join(self.texture_path, "arm7.png")), self.palette))
 
     def Draw(self):
         self.Animation(self)
 
     def collide(self, side="bottom"):
         collide = 0
+
         if side == "bottom":
             for i in range(0, self.hitbox.w):
                 if not common.out_of_bounds((self.hitbox.x+i, self.hitbox.y+self.hitbox.h-1)):
                     if common.loaded_level.collision.get_at((self.hitbox.x+i, self.hitbox.y+self.hitbox.h-1)) == 1:
                         collide += 1
+
         elif side == "grounded":
             for i in range(0, self.hitbox.w):
                 if not common.out_of_bounds((self.hitbox.x+i, self.hitbox.y+self.hitbox.h)):
                     if common.loaded_level.collision.get_at((self.hitbox.x+i, self.hitbox.y+self.hitbox.h)) == 1:
                         collide += 1
+
         elif side == "top":
             for i in range(0, self.hitbox.w):
                 if not common.out_of_bounds((self.hitbox.x+i, self.hitbox.y)):
                     if common.loaded_level.collision.get_at((self.hitbox.x+i, self.hitbox.y)) == 1:
                         collide += 1
+
         elif side == "left":
             for i in range(1, self.hitbox.h-4):
                 if not common.out_of_bounds((self.hitbox.x, self.hitbox.y+i)):
                     if common.loaded_level.collision.get_at((self.hitbox.x, self.hitbox.y+i)) == 1:
                         collide += 1
+
         elif side == "right":
             for i in range(1, self.hitbox.h-4):
                 if not common.out_of_bounds((self.hitbox.x+self.hitbox.w-1, self.hitbox.y+i)):
                     if common.loaded_level.collision.get_at((self.hitbox.x+self.hitbox.w-1, self.hitbox.y+i)) == 1:
                         collide += 1
+
         return collide
 
     def update_physics(self, up=False, left=False, right=False):
         self.iframes.Tick()
+
         if not (right or left):
             if self.grounded:
                 self.x_vel *= self.ground_drag
             else:
                 self.x_vel *= self.air_drag
+
         new_y_vel = self.y_vel + self.grav
+
         if not new_y_vel >= self.max_fall and not self.grounded:
             self.y_vel = new_y_vel
+
         if self.x_vel > self.max_speed:
             self.x_vel = self.max_speed
+
         if self.x_vel < -1*self.max_speed:
             self.x_vel = -1*self.max_speed
+
         if up and self.grounded_ticks >= -3 and self.has_jumped == False:
             self.y_vel -= self.jump
             self.has_jumped = True
+
             if self.y_vel >= self.jump:
                 self.y_vel = -self.jump
+
         elif left and self.x_vel > -self.max_speed:
             if self.grounded:
                 self.x_vel -= self.accel
             else:
                 self.x_vel -= self.air_accel
+
         elif right and self.x_vel < self.max_speed:
             if self.grounded:
                 self.x_vel += self.accel
             else:
                 self.x_vel += self.air_accel
+
         if self.x+self.x_vel-(self.hitbox.w/2) < 0:
             self.x = self.hitbox.w/2
             self.x_vel = 0
@@ -232,6 +260,7 @@ class Entity():
             self.x_vel = 0
         else:
             self.x += self.x_vel
+
         if self.y+self.y_vel-(self.hitbox.h/2) < 0:
             self.y = self.hitbox.h/2
             self.y_vel = 0
@@ -240,16 +269,20 @@ class Entity():
             self.y_vel = 0
         else:
             self.y += self.y_vel
+
         if self.x_vel <= 0.01 and self.x_vel >= -0.01:
             self.x_vel = 0
+
         self.hitbox.x = self.x-self.texture_size[0]
         self.hitbox.y = self.y-self.texture_size[1]
         still_colliding = True
         ticker = common.Ticker(100)
         ticker.Trigger()
+
         while still_colliding:
             ticker.Tick()
             still_colliding = False
+
             if self.collide("bottom") >= 2:
                 self.collisions["bottom"] = True
                 self.y -= 1
@@ -259,6 +292,7 @@ class Entity():
                     self.y_vel = 0
             else:
                 self.collisions["bottom"] = False
+
             if self.collide("top") >= 2:
                 self.collisions["top"] = True
                 self.y += 1
@@ -268,6 +302,7 @@ class Entity():
                     self.y_vel = 0
             else:
                 self.collisions["top"] = False
+
             if self.collide("left") >= 2:
                 self.collisions["left"] = True
                 self.x += 1
@@ -277,6 +312,7 @@ class Entity():
                     self.x_vel = 0
             elif not self.grounded:
                 self.collisions["left"] = False
+
             if self.collide("right") >= 2:
                 self.collisions["right"] = True
                 self.x -= 1
@@ -286,11 +322,13 @@ class Entity():
                     self.x_vel = 0
             elif not self.grounded:
                 self.collisions["right"] = False
+
             if self.collide("grounded") >= 1:
                 self.grounded = True
                 self.has_jumped = False
             else:
                 self.grounded = False
+
             if self.grounded:
                 if self.grounded_ticks < 0:
                     self.grounded_ticks = 0
@@ -301,9 +339,11 @@ class Entity():
                     self.grounded_ticks = 0
                 else:
                     self.grounded_ticks -= 1
+
             if not ticker.active:
                 time.sleep(2)
-                raise RuntimeError("collision hang at "+str((self.x, self.y)))
+                raise RuntimeError("Collision hang at "+str((self.x, self.y)))
+
         w_offset = -constants.screen_scale/2
         h_offset = -constants.screen_scale
         pos = (int((self.x-common.loaded_level.camera[0])*constants.screen_scale+w_offset), int(
@@ -353,7 +393,7 @@ class DynamicTransitionObject():
                         (common.global_position[0], common.global_position[1]-2))].load()
                 except KeyError:
                     common.loaded_level.load("test2")
-                    print("No valid level could be loaded at "+str(common.global_position[0])+", "+str(
+                    error("No valid level could be loaded at "+str(common.global_position[0])+", "+str(
                         common.global_position[1]-2)+", so the default level was loaded")
             elif self.id == 1:
                 try:
@@ -361,7 +401,7 @@ class DynamicTransitionObject():
                         (common.global_position[0]+2, common.global_position[1]))].load()
                 except KeyError:
                     common.loaded_level.load("test2")
-                    print("No valid level could be loaded at "+str(common.global_position[0]+2)+", "+str(
+                    error("No valid level could be loaded at "+str(common.global_position[0]+2)+", "+str(
                         common.global_position[1])+", so the default level was loaded")
             elif self.id == 2:
                 try:
@@ -369,7 +409,7 @@ class DynamicTransitionObject():
                         (common.global_position[0], common.global_position[1]+2))].load()
                 except KeyError:
                     common.level_level.load("test2")
-                    print("No valid level could be loaded at "+str(common.global_position[0])+", "+str(
+                    error("No valid level could be loaded at "+str(common.global_position[0])+", "+str(
                         common.global_position[1]+2)+", so the default level was loaded")
             elif self.id == 3:
                 try:
@@ -377,7 +417,7 @@ class DynamicTransitionObject():
                         (common.global_position[0]-2, common.global_position[1]))].load()
                 except KeyError:
                     common.loaded_level.load("test2")
-                    print("No valid level could be loaded at "+str(common.global_position[0]-2)+", "+str(
+                    error("No valid level could be loaded at "+str(common.global_position[0]-2)+", "+str(
                         common.global_position[1])+", so the default level was loaded")
             else:
                 raise ValueError("Invalid transition id")

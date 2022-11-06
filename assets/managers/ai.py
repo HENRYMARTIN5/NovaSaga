@@ -1,6 +1,6 @@
 import pygame
 from assets.managers import constants, common
-
+from util.logging import info, debug
 
 def simple(self):
     self.update_physics()
@@ -30,7 +30,7 @@ def playerAI(self):
     if self.has_control:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RSHIFT]:
-            print((self.x, self.y))
+            debug((self.x, self.y))
         if keys[pygame.K_ESCAPE]:
             common.menu = "pause"
         if keys[pygame.K_UP] and self.hp < self.max_hp:
@@ -66,6 +66,6 @@ def playerAI(self):
                              * constants.CAM_WIDTH)+common.loaded_level.camera[0])
                 pos[1] = int((pos[1]/constants.disp_win.get_height()
                              * constants.CAM_HEIGHT)+common.loaded_level.camera[1])
-                print(pos)
+                debug(pos)
     else:
         self.update_physics(False, False, False)

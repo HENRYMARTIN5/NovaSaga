@@ -12,6 +12,10 @@ menu_ticks = common.Ticker(20)
 width_eighth = constants.menu_surface.get_width()/8
 height_eighth = constants.menu_surface.get_height()/8
 
+###################
+startmap = "start"
+###################
+
 class Button():
     def __init__(self, rect, path, index):
         self.rect = rect
@@ -142,7 +146,7 @@ def title():
         if pygame.mouse.get_pressed(5)[0]:
             if title_ui[2].rect.collidepoint(pygame.mouse.get_pos()):
                 common.menu = None
-                common.run = level.Run(0, os.urandom(16))
+                common.run = level.Run(0, os.urandom(16), startmap=startmap)
                 menu_ticks.Trigger()
             elif title_ui[3].rect.collidepoint(pygame.mouse.get_pos()):
                 warning("Settings not yet implemented")
@@ -176,7 +180,7 @@ def pause():
                 common.menu = None
                 menu_ticks.Trigger()
             elif pause_ui[3].rect.collidepoint(pygame.mouse.get_pos()):
-                print("settings not implemented")
+                warning("Settings not implemented")
                 menu_ticks.Trigger()
             elif pause_ui[4].rect.collidepoint(pygame.mouse.get_pos()):
                 common.run = level.Run(0, 500)
@@ -190,7 +194,7 @@ def pause():
                 common.menu = "main"
                 menu_ticks.Trigger()
             elif pause_ui[6].rect.collidepoint(pygame.mouse.get_pos()):
-                print("game quit from pause")
+                info("Game quit from pause")
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
 
         if keys[pygame.K_ESCAPE]:

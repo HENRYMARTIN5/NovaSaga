@@ -469,9 +469,12 @@ class Map():
                     surface, constants.PATH_TILE_COLOR, pos, (pos[0]+2, pos[1]))
         return surface
 
-    def __init__(self, seed, type=0):
+    def __init__(self, seed, type=0, startmap="start"):
         self.seed = seed
         self.type = type
+        self.startmap = startmap
+
+
         if self.type == 0:  # intermediary type
 
             self.map = pygame.Surface((99, 99))
@@ -630,23 +633,23 @@ class Map():
                             self.levelarray.update(
                                 {str((i, j)): UnloadedLevel("empty", (i, j))})
                         else:
-                            print("up: "+str(self.map.get_at((i, j-1)))+", right: "+str(self.map.get_at((i+1, j))) +
+                            error("up: "+str(self.map.get_at((i, j-1)))+", right: "+str(self.map.get_at((i+1, j))) +
                                   ", down: "+str(self.map.get_at((i, j+1)))+", left: "+str(self.map.get_at((i-1, j))))
 
                             raise ValueError(
                                 "invalid level map shape at "+str(i)+", "+str(j))
 
             self.levelarray.update({str((self.doorways[0].pos[0], self.doorways[0].pos[1])): UnloadedLevel(
-                "start", self.doorways[0].pos)})
+                self.startmap, self.doorways[0].pos)})
 
-            common.loaded_level.load("start")
+            common.loaded_level.load(self.startmap)
             
             common.global_position = [
                 self.doorways[0].pos[0], self.doorways[0].pos[1]]
 
 
 class Run():
-    def __init__(self, difficulty, seed=0x00000000):  # this object will be saved
+    def __init__(self, difficulty, seed=0x00000000, startmap="start"):  # this object will be saved
         self.seed = seed
         common.player.x = constants.DEF_START_POS[0]
         common.player.y = constants.DEF_START_POS[1]
@@ -657,4 +660,4 @@ class Run():
         common.player.facing_away = True
         random.seed = self.seed
         self.difficulty = difficulty
-        self.intermediary = Map(self.seed)
+        self.intermediary = Map(self.seed, startmap=startmap)
