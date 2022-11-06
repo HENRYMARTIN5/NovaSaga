@@ -50,8 +50,8 @@ class UIElement():
 
 
 ui_assets = {}
-for i in os.listdir("level-creator-assets"):
-    j = pathlib.Path(os.path.join("level-creator-assets", i))
+for i in os.listdir("assets/level-creator"):
+    j = pathlib.Path(os.path.join("assets/level-creator", i))
     if j.is_file():
         if j.suffix == ".png":
             ui_assets.update(
@@ -106,6 +106,7 @@ def draw():
                 if not collision_file.exists() and not display_file.exists():
                     raise FileNotFoundError(
                         "Verify that the level "+i+" has either a collision.png or a display.png")
+                        
                 elif not collision_file.exists():
                     collision = pygame.image.load(display_file)
                     for j in range(collision.get_width()-1):
@@ -115,6 +116,7 @@ def draw():
                     display = pygame.image.load(display_file)
                     display = pygame.transform.scale(display, (display.get_width(
                     )*leveldata.get("level_scale", 1), display.get_height()*leveldata.get("level_scale", 1)))
+
                 elif not display_file.exists():
                     display = pygame.image.load(collision_file)
                     collision = pygame.image.load(collision_file)
