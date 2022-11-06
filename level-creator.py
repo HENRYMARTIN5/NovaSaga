@@ -19,7 +19,7 @@ MIN_ZOOM = 0.0625
 
 screen_scale = 4
 disp_win = pygame.display.set_mode((WIDTH*screen_scale, HEIGHT*screen_scale))
-pygame.display.set_caption("Nova Saga Level Editor")
+pygame.display.set_caption("Nova Saga Level Creator")
 collision = pygame.Surface((1, 1))
 display = pygame.Surface((1, 1))
 hud = pygame.Surface((WIDTH*screen_scale, HEIGHT*screen_scale))
@@ -92,6 +92,7 @@ def draw():
             rect.y = 5*screen_scale+8*screen_scale*lines
 
             if pygame.mouse.get_focused() and rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+                
                 collision_file = pathlib.Path(
                     "assets", "levels", i, "collision.png")
                 display_file = pathlib.Path(
