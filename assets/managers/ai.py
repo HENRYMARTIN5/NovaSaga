@@ -11,15 +11,20 @@ def mite(self):
         up = False
         left = False
         right = False
+
         if common.player.x < self.x-6:
             left = True
         elif common.player.x > self.x+6:
             right = True
+
         if self.collisions["left"] or self.collisions["right"]:
             up = True
+
         if common.player.x-18 < self.x and common.player.x+18 > self.x and self.y > common.player.y-8 and self.y < common.player.y+8:
             up = True
+
         self.update_physics(up, left, right)
+
         if self.hitbox.colliderect(common.player.hitbox):
             common.player.damage(1)
     else:
@@ -27,35 +32,45 @@ def mite(self):
 
 
 def playerAI(self):
+
     if self.has_control:
         keys = pygame.key.get_pressed()
+
         if keys[pygame.K_RSHIFT]:
-            debug((self.x, self.y))
+            debug(str((self.x, self.y)))
+
         if keys[pygame.K_ESCAPE]:
             common.menu = "pause"
+
         if keys[pygame.K_UP] and self.hp < self.max_hp:
             self.hp += 1
+
         if keys[pygame.K_DOWN] and self.hp > 0:
             self.damage(1)
+
         if keys[pygame.K_RIGHT]:
             self.xp += 1
+
         if keys[pygame.K_LEFT] and self.xp > 0:
             self.xp -= 1
+
         self.update_physics(common.GetPressed("jump"), common.GetPressed(
             "left"), common.GetPressed("right"))
+
         for i in self.inventory:
             if self.inventory[i] != None:
                 if self.inventory[i].type == "gun":
                     self.inventory[i].cooldown.Tick()
-        if common.GetPressed("action1"):
-            if self.inventory["main_0"] != None:
-                self.inventory["main_0"].on_use(self.inventory["main_0"])
-        if common.GetPressed("action2"):
-            if self.inventory["main_1"] != None:
-                self.inventory["main_1"].on_use(self.inventory["main_1"])
-        if common.GetPressed("action3"):
-            if self.inventory["main_2"] != None:
-                self.inventory["main_2"].on_use(self.inventory["main_2"])
+
+        if common.GetPressed("action1") and self.inventory["main_0"] != None:
+            self.inventory["main_0"].on_use(self.inventory["main_0"])
+
+        if common.GetPressed("action2") and self.inventory["main_1"] != None:
+            self.inventory["main_1"].on_use(self.inventory["main_1"])
+
+        if common.GetPressed("action3") and self.inventory["main_2"] != None:
+            self.inventory["main_2"].on_use(self.inventory["main_2"])
+
         if pygame.mouse.get_focused():
             #game_classes.boxes[len(game_classes.boxes)-1].rect.x = pygame.mouse.get_pos()[0]
             #game_classes.boxes[len(game_classes.boxes)-1].rect.y = pygame.mouse.get_pos()[1]

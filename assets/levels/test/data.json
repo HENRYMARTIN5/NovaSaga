@@ -33,8 +33,8 @@
         {
             "type": "mite",
             "hp": 5,
-            "x": 5,
-            "y": 5,
+            "x": 80,
+            "y": 190,
             "always_spawns": true
         }
     ],

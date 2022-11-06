@@ -3,7 +3,7 @@ import pygame
 import datetime
 
 ###########################
-logDebugToConsole = False
+logDebugToConsole = True
 ###########################
 
 f = open("latest.log", "w")
