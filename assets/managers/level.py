@@ -5,6 +5,7 @@ import os
 import random
 import json
 import pygame
+from util.logging import *
 
 
 class Box():
@@ -19,11 +20,13 @@ class Box():
             player_x = int(common.player.x)+0.1
             player_y = int(common.player.y-4)
             point9 = None
+
             # get camera values, used to keep the drawn polygons onscreen
             camera_height = common.loaded_level.camera_surface.get_height()
             camera_width = common.loaded_level.camera_surface.get_width()
             camera_x = common.loaded_level.camera_surface.get_offset()[0]
             camera_y = common.loaded_level.camera_surface.get_offset()[1]
+
             # prepare for checking whether or not the box is onscreen
             e = common.loaded_level.camera_surface.get_rect()
             e.x = camera_x
@@ -32,15 +35,20 @@ class Box():
             y = self.rect.y
             x2 = x+self.rect.w
             y2 = y+self.rect.h
+
             if self.rect.colliderect(e):  # check if the box is onscreen
                 if x < camera_x:  # constrain the x and y to within the screen
                     x = camera_x-1
+
                 if x2 > camera_x+camera_width:
                     x2 = camera_x+camera_width+1
+
                 if y < camera_y:
                     y = camera_y-1
+
                 if y2 > camera_y+camera_height:
                     y2 = camera_y+camera_height+1
+
                 if player_x > x2:  # prepare some x positions for the screen edges
                     x_value_1 = camera_x
                     x_value_2 = camera_x
@@ -53,6 +61,7 @@ class Box():
                 else:
                     x_value_1 = camera_width+camera_x
                     x_value_2 = camera_width+camera_x
+
                 if player_y <= y and player_x >= x2:  # determine where the player is in relation to the box
                     # then thats used to place the proper points on the box
                     point1 = (x, -y)
@@ -94,13 +103,17 @@ class Box():
                     point1 = (x, -y)
                     point2 = (x, -y)
                     point8 = (x, y)
+                
                 # compute the slopes, for use later
                 slope2 = (point1[1]-neg_player_y)/(point1[0]-player_x)
                 slope1 = (point2[1]-neg_player_y)/(point2[0]-player_x)
+
                 # compute the y values, using adjusted point-slope form
                 y_value1 = -(neg_player_y-((player_x-x_value_1)*slope1))
+
                 # 2 x values, a y value, and a slope
                 y_value2 = -(neg_player_y-((player_x-x_value_2)*slope2))
+
                 if y_value1 <= camera_y:  # check if the y values are offscreen, and if they are, set the y value within the screen
                     y_value1 = camera_y  # and compute the x value for where that line intersects the y value
                     x_value_1 = player_x-((neg_player_y+camera_y)/slope1)
@@ -108,6 +121,7 @@ class Box():
                     y_value1 = camera_height+camera_y
                     x_value_1 = player_x - \
                         ((neg_player_y+camera_height+camera_y)/slope1)
+    
                 if y_value2 <= camera_y:
                     y_value2 = camera_y
                     x_value_2 = player_x-((neg_player_y+camera_y)/slope2)
@@ -115,6 +129,7 @@ class Box():
                     y_value2 = camera_height+camera_y
                     x_value_2 = player_x - \
                         ((neg_player_y+camera_height+camera_y)/slope2)
+
                 # compensate for the reversed y-axis
                 point1 = (point1[0], -point1[1])
                 point2 = (point2[0], -point2[1])
@@ -130,14 +145,18 @@ class Box():
                     point2 = (point2[0]-1, point2[1]-1)
                 elif point2 == (x, y2):
                     point2 = (point2[0], point2[1]-1)
+
                 # write some points, these are the edge points
                 point3 = (x_value_1, y_value1)
                 point4 = (x_value_2, y_value2)
                 points = [point1, point8]
+
                 if point9 != None:
                     points.append(point9)
+
                 points.append(point2)
                 points.append(point3)
+
                 # adds extra points in the corners where needed, else there'll be a triangular gap
                 if not (y_value1 == y_value2 or x_value_1 == x_value_2):
                     # whenever 1 y value leaves the screen and the other doesn't
@@ -162,12 +181,10 @@ class Box():
                         points.append((x_value_1, y_value2))
                     else:
                         points.append((x_value_2, y_value1))
+                
                 points.append(point4)
                 pygame.draw.polygon(constants.WIN, (0, 0, 0), points)
-                # pygame.draw.line(constants.WIN,(0,0,0),point1,point4,1)
-                # pygame.draw.line(constants.WIN,(0,0,0),point2,point3,1)
-                # draw the polygon (finally)
-
+    
     def afterdraw(self):
         pygame.draw.rect(constants.WIN, (3, 33, 3), self.rect)
 
@@ -192,12 +209,14 @@ class Level():
     def load(self, levelname="test"):
         self.name = levelname
         path = open(os.path.join("assets", "levels", levelname, "data.json"))
+
         if os.path.exists(os.path.join("assets", "levels", levelname, "data.json")):
             # load level data.json, next few lines load collision and display from one or both files
             data = json.load(path)
         else:
             raise FileNotFoundError(
                 "the \'data\' file for "+levelname+" could not be found")
+
         if [os.path.exists(os.path.join("assets", "levels", levelname, "display.png")) and os.path.exists(os.path.join("assets", "levels", levelname, "collision.png"))] == [False, False]:
             raise FileNotFoundError(
                 "both the \'collision\' and \'display\' files are missing from "+levelname+", at least one must be present")
@@ -205,35 +224,47 @@ class Level():
         elif not os.path.exists(os.path.join("assets", "levels", levelname, "display.png")):
             self.display_texture = pygame.image.load(os.path.join(
                 "assets", "levels", levelname, "collision.png"))
+
             self.display_texture = pygame.transform.scale(self.display_texture, (self.display_texture.get_width(
             )*data["level_scale"], self.display_texture.get_height()*data["level_scale"]))
+
             self.collision_texture = self.display_texture.copy()
         # load from display file if collision file doesnt exist
         elif not os.path.exists(os.path.join("assets", "levels", levelname, "collision.png")):
             self.display_texture = pygame.image.load(
                 os.path.join("assets", "levels", levelname, "display.png"))
+
             self.display_texture = pygame.transform.scale(self.display_texture, (self.display_texture.get_width(
             )*data["level_scale"], self.display_texture.get_height()*data["level_scale"]))
+
             self.collision_texture = self.display_texture.copy()
         else:  # if both files are present, load normally
             self.display_texture = pygame.image.load(
                 os.path.join("assets", "levels", levelname, "display.png"))
+
             self.collision_texture = pygame.image.load(
                 os.path.join("assets", "levels", levelname, "collision.png"))
+
             self.collision_texture = pygame.transform.scale(self.collision_texture, (self.collision_texture.get_width(
             )*data["level_scale"], self.collision_texture.get_height()*data["level_scale"]))
+
         self.collision = pygame.mask.from_surface(
             self.collision_texture)  # make collision
         self.camera = [0, 0]  # make camera
+
         # make the main level surface from the display texture
         constants.WIN = pygame.transform.scale(
             constants.WIN, (self.display_texture.get_size()))
+
         # make the camera, which is a subsurface of the level surface
         self.camera_surface = constants.WIN.subsurface(
             0, 0, constants.CAM_WIDTH, constants.CAM_HEIGHT)
+
         self.hud = pygame.surface.Surface((constants.disp_win.get_width(
         ), constants.disp_win.get_height()))  # make a hud, where hp and such will go
+
         self.hud.set_colorkey((0, 0, 0, 255))  # allow hud to be transparent
+
         # clear out various lists, in case they have stuff left over from the previous level
         common.boxes.clear()
         common.level_transitions.clear()
@@ -241,6 +272,7 @@ class Level():
         common.projectiles.clear()
         common.particles.clear()
         common.particle_spawners.clear()
+
         try:
             for i in data["boxes"]:
                 # add extra boxes w/o collision
@@ -248,6 +280,7 @@ class Level():
                     Box(pygame.Rect(i["x"], i["y"], i["w"], i["h"])))
         except:
             pass
+
         try:
             for i in data["level_transitions"]:
                 if i["style"] == "old":
@@ -258,18 +291,22 @@ class Level():
                         i["x"], i["y"], i["w"], i['h']), i["transition_id"], (i["dest_x"], i["dest_y"])))
         except:
             pass
+
         try:
             for i in data["enemies"]:
                 entity.new_enemy(i["x"], i["y"], i["hp"],
                                  i["type"])  # add enemies
         except:
             pass
+
         if data.get("particle_spawners", None) != None:
             for i in data["particle_spawners"]:
                 common.particle_spawners.append(particle.ParticleArea(pygame.Rect(
                     i["x"], i["y"], i["w"], i["h"]), i["freq"], i["color"], i["behavior"], i["duration"]))
+
         k = 0
         m = 0
+
         boxrectlist = []  # all this is the algorithm for making the boxes
         for i in range(0, self.collision_texture.get_width()-1):  # for each x
             for j in range(0, self.collision_texture.get_height()-1):  # for each y
@@ -304,6 +341,7 @@ class Level():
                         newbox.h = m
                     if not (newbox.w == 0 or newbox.h == 0):  # check that the rect isnt invalid
                         boxrectlist.append(newbox)  # then add the box
+
         for i in boxrectlist:  # for every rect in the box list, make an actual Box class
             common.boxes.append(Box(i))
 
@@ -314,14 +352,19 @@ class Level():
         else:
             self.camera = [int(common.player.x-(constants.CAM_WIDTH/2)), int(common.player.y-(
                 constants.CAM_HEIGHT/2))]  # set the camera to put the player in the middle
+
         if self.camera[0] <= 0:  # constrain the camera to within the level borders, else game crash
             self.camera[0] = 0
+
         if self.camera[0]+constants.CAM_WIDTH >= constants.WIN.get_width():
             self.camera[0] = constants.WIN.get_width()-constants.CAM_WIDTH
+
         if self.camera[1] <= 0:
             self.camera[1] = 0
+
         if self.camera[1]+constants.CAM_HEIGHT >= constants.WIN.get_height():
             self.camera[1] = constants.WIN.get_height()-constants.CAM_HEIGHT
+
         self.camera_surface = constants.WIN.subsurface(
             self.camera[0], self.camera[1], constants.CAM_WIDTH, constants.CAM_HEIGHT)  # update the camera subsurface
 
@@ -336,11 +379,13 @@ class Node():
 
     def check(self, node):
         made_connection = False
+
         if len(self.connections) < self.maxconnections and len(node.connections) < node.maxconnections and self.connections.count(node) == 0:
             self.connections.append(node)
             node.connections.append(self)
             self.owner.path(self.pos, node.pos)
             made_connection = True
+
         return made_connection
 
 
@@ -348,22 +393,30 @@ class Map():
     def GrowingTree(surface, extraconnections=1000):  # maze generation algorithm
         pos = (random.randint(0, int(surface.get_width()/2))*2-1,
                random.randint(0, int(surface.get_height()/2))*2-1)
+
         allvisited = [pos]
         visited = [pos]
+
         while visited != []:
+
             valid_pos = [False, False, False, False]
+
             if pos[1]-2 > 0:  # check the positions around it to see if they were visited
                 if allvisited.count((pos[0], pos[1]-2)) == 0:
                     valid_pos[0] = True
+
             if pos[0]+2 < surface.get_width():
                 if allvisited.count((pos[0]+2, pos[1])) == 0:
                     valid_pos[1] = True
+
             if pos[1]+2 < surface.get_height():
                 if allvisited.count((pos[0], pos[1]+2)) == 0:
                     valid_pos[2] = True
+
             if pos[0]-2 > 0:
                 if allvisited.count((pos[0]-2, pos[1])) == 0:
                     valid_pos[3] = True
+
             # if all tiles adjacent are visited, remove from the visited list
             if valid_pos == [False, False, False, False]:
                 visited.remove(pos)
@@ -384,15 +437,19 @@ class Map():
                         break
                     if valid_pos == [False, False, False, False]:
                         break
+
                 visited.append(newpos)
                 allvisited.append(newpos)
+
                 pygame.draw.line(
                     surface, constants.PATH_TILE_COLOR, pos, newpos)
+
             if random.random() <= 0.3 and len(visited) > 0:  # allow branches by allowing random teleportation
                 pos = visited[random.randint(0, len(visited)-1)]
             else:
                 if len(visited) > 0:  # most of the time, it will continue with the previous position
                     pos = visited[len(visited)-1]
+
         # mess up the perfect maze by splattering with random connections
         for i in range(0, extraconnections):
             pos = (random.randint(3, int(surface.get_width()/2))*2-3,
@@ -416,6 +473,7 @@ class Map():
         self.seed = seed
         self.type = type
         if self.type == 0:  # intermediary type
+
             self.map = pygame.Surface((99, 99))
             self.map.fill(constants.MAP_BACKGROUND_COLOR)
             self.doorways = []
@@ -447,6 +505,7 @@ class Map():
             for i in range(len(self.doorways)):  # make the pos' into Node objects
                 self.doorways[i] = Node(self.doorways[i], "doorway", 2, self)
             self.secretrooms = []  # secret rooms (orange tiles)
+
             for i in range(random.randint(3, 6)):
                 while True:
                     point = [2*random.randint(5, 45)-1,
@@ -454,8 +513,10 @@ class Map():
                     if self.map.get_at(point) == constants.MAP_BACKGROUND_COLOR:
                         break
                 self.secretrooms.append(Node(point, "secret", 1, self))
+
             self.map.blit(Map.GrowingTree(self.map, 600),
                           (0, 0))  # generate the maze
+
             for i in self.secretrooms:  # make sure secret rooms only have 1 tile connection
                 self.map.set_at(i.pos, constants.SECRET_ROOM_TILE_COLOR)
                 value = random.randint(0, 3)
@@ -479,6 +540,7 @@ class Map():
                 else:
                     self.map.set_at((i.pos[0]+1, i.pos[1]),
                                     constants.PATH_TILE_COLOR)
+
             self.map.set_at(
                 self.doorways[0].pos, constants.START_TILE_COLOR)  # start tile
             # memory tile
@@ -515,6 +577,7 @@ class Map():
             pygame.draw.rect(self.map, constants.PATH_TILE_COLOR, pygame.Rect(
                 self.doorways[0].pos[0]-2, self.doorways[0].pos[1]-2, 5, 5), 1)
             self.levelarray = {}
+
             for i in range(1, int(self.map.get_width()/2)*2, 2):
                 for j in range(1, int(self.map.get_height()/2)*2, 2):
                     if self.map.get_at((i, j)) != constants.MAP_BACKGROUND_COLOR and self.map.get_at((i, j)) != constants.SECRET_ROOM_TILE_COLOR:
@@ -569,11 +632,15 @@ class Map():
                         else:
                             print("up: "+str(self.map.get_at((i, j-1)))+", right: "+str(self.map.get_at((i+1, j))) +
                                   ", down: "+str(self.map.get_at((i, j+1)))+", left: "+str(self.map.get_at((i-1, j))))
+
                             raise ValueError(
                                 "invalid level map shape at "+str(i)+", "+str(j))
+
             self.levelarray.update({str((self.doorways[0].pos[0], self.doorways[0].pos[1])): UnloadedLevel(
                 "start", self.doorways[0].pos)})
+
             common.loaded_level.load("start")
+            
             common.global_position = [
                 self.doorways[0].pos[0], self.doorways[0].pos[1]]
 
