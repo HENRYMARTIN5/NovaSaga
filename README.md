@@ -15,7 +15,7 @@ source venv/bin/activate (if on linux)
 pip install -r requirements.txt
 ```
 
-1. Run the game
+3. Run the game
 
 ```sh
 python main.py
