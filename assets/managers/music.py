@@ -1,15 +1,23 @@
 from assets.util.logging import *
 from pygame import mixer
 import os
+from os.path import exists
 
 
 class MusicManager:
     def __init__(self):
-        mixer.init()
-        self.music = {}
-        self.current_music = None
-        self.current_track = None
-        self.fetch_music("assets/music")
+        if not exists("gitpod"):
+            mixer.init()
+            self.music = {}
+            self.current_music = None
+            self.current_track = None
+            self.play_music = True
+            self.fetch_music("assets/music")
+        else:
+            self.music = None
+            self.current_music = None
+            self.current_track = None
+            self.play_music = False
 
     def fetch_music(self, dir):
         info("Fetching music from " + dir)
@@ -19,32 +27,36 @@ class MusicManager:
                 debug("Found music file " + file)
     
     def play(self, name):
-        if name + ".wav" in self.music:
-            if self.current_music and self.current_track != name:
-                self.current_music.stop()
-                self.current_music.fadeout(1500)
-            elif self.current_track == name:
-                debug("Music " + name + " is already playing, ignoring request")
-                return
-            
-            self.current_music = mixer.Sound(self.music[name + ".wav"])
-            self.current_music.play()
-            debug("Playing music " + name)
-        else:
-            error("Music file " + name + ".wav not found")
+        if self.play_music:
+            if name + ".wav" in self.music:
+                if self.current_music and self.current_track != name:
+                    self.current_music.stop()
+                    self.current_music.fadeout(1500)
+                elif self.current_track == name:
+                    debug("Music " + name + " is already playing, ignoring request")
+                    return
+                
+                self.current_music = mixer.Sound(self.music[name + ".wav"])
+                self.current_music.play()
+                debug("Playing music " + name)
+            else:
+                error("Music file " + name + ".wav not found")
     
     def stop(self):
-        if self.current_music:
-            self.current_music.stop()
-            self.current_music = None
+        if self.play_music:
+            if self.current_music:
+                self.current_music.stop()
+                self.current_music = None
     
     def pause(self):
-        if self.current_music:
-            self.current_music.stop()
+        if self.play_music:
+            if self.current_music:
+                self.current_music.stop()
 
     def unpause(self):
-        if self.current_music:
-            self.current_music.play()
+        if self.play_music:
+            if self.current_music:
+                self.current_music.play()
     
     def get_current_music(self):
         return self.current_music
