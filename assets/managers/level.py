@@ -6,6 +6,7 @@ import random
 import json
 import pygame
 from util.logging import *
+from assets.managers.music import MusicManager
 
 
 class Box():
@@ -200,7 +201,8 @@ class UnloadedLevel():
 
 
 class Level():
-    def __init__(self):
+    def __init__(self, musicManager):
+        self.musicManager = musicManager
         self.name = "simple"
         self.camera_surface = constants.WIN.subsurface(
             0, 0, constants.CAM_WIDTH, constants.CAM_HEIGHT)
@@ -291,6 +293,15 @@ class Level():
                         i["x"], i["y"], i["w"], i['h']), i["transition_id"], (i["dest_x"], i["dest_y"])))
         except:
             pass
+
+        try:
+            data["music"]
+        except:
+            data["music"] = "none"
+
+        if data["music"] != "none":
+            self.musicManager.play(data["music"])
+
 
         try:
             for i in data["enemies"]:
@@ -474,7 +485,6 @@ class Map():
         self.type = type
         self.startmap = startmap
 
-
         if self.type == 0:  # intermediary type
 
             self.map = pygame.Surface((99, 99))
@@ -640,7 +650,7 @@ class Map():
                                 "invalid level map shape at "+str(i)+", "+str(j))
 
             self.levelarray.update({str((self.doorways[0].pos[0], self.doorways[0].pos[1])): UnloadedLevel(
-                self.startmap, self.doorways[0].pos)})
+                self.startmap, self.doorways[0].pos)}) # add start map
 
             common.loaded_level.load(self.startmap)
             

@@ -35,7 +35,9 @@ PROJ_PATH = os.path.join("assets", "sprites", "projectile")
 ui_path = os.path.join("assets", "managers", "menu_ui")
 disp_win = pygame.display.set_mode((WIDTH*screen_scale, HEIGHT*screen_scale))
 title_subtitles = ["Nova Saga: ", "Mirror Worlds", "The Unknown", "Brain Games", "The Game", "LLOORREE!!!", "Inspired by FTL", "Inspired by Terraria",
-                   "All Inclusive!", "Indie Game!", "Inspired by 20 Minutes till Dawn", "Multiverse Theory", "Quantum Mechanics", "Uploading to human.exe", "Not an Asteroid", "Probably runs DOOM!", "Built by an idiot!"]
+                   "All Inclusive!", "Indie Game!", "Inspired by 20 Minutes till Dawn", "Multiverse Theory", "Quantum Mechanics", "Uploading to human.exe",
+                   "Not an Asteroid", "Probably runs DOOM!", "Built by an idiot!", "16 / 16 / 16", "Omnipotent!", "Sanity-depleting!", "Supercalifragilisticexpialidocious!",
+                   "HeLP", "Transmission recieved: signal strength weak", "1.21 Gigawatts!", "Endless possibilities!", "Mind is software."]
 
 pygame.display.set_caption(
     title_subtitles[0]+title_subtitles[random.randint(1, len(title_subtitles)-1)])

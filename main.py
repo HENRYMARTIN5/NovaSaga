@@ -11,6 +11,7 @@ from assets.managers import menus
 from assets.managers import items
 from assets.managers import projectile
 from assets.managers import level, cutscene
+from assets.managers.music import MusicManager
 from util.logging import *
 
 
@@ -74,8 +75,9 @@ def main():
     clock = pygame.time.Clock()
     isRunning = True
     tick = 0
+    musicManager = MusicManager()
 
-    common.loaded_level = level.Level()
+    common.loaded_level = level.Level(musicManager)
     common.player = entity.Entity("player", "player")
     common.player.texture_size = [4, 8]
     common.player.hitbox = pygame.Rect(0, 0, 8, 16)
