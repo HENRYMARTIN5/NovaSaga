@@ -4,13 +4,7 @@ import pygame
 import os
 import random
 import json
-from assets.managers import common, entity
-from assets.managers import constants
-from assets.managers import ai
-from assets.managers import menus
-from assets.managers import items
-from assets.managers import projectile
-from assets.managers import level, cutscene
+from assets.managers import common, entity, constants, ai, menus, items, projectile, level, cutscene
 from assets.managers.music import MusicManager
 from util.logging import *
 

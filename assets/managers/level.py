@@ -1,10 +1,5 @@
-from assets.managers import common
-from assets.managers import constants
-from assets.managers import entity, particle, ai, items
-import os
-import random
-import json
-import pygame
+from assets.managers import common, constants, entity, particle, ai, items
+import os, random, json, pygame
 from util.logging import *
 from assets.managers.music import MusicManager
 

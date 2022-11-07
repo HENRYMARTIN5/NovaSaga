@@ -1,6 +1,4 @@
-import pygame
-import os
-import random
+import pygame, os, random
 
 random.seed = os.urandom(4)
 pygame.font.init()

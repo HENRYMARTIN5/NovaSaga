@@ -1,8 +1,6 @@
 import pygame
 from assets.managers import constants, common, level
-import random
-import math
-import os
+import random, math, os
 
 
 def simple(self):

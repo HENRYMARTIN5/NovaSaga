@@ -1,9 +1,5 @@
-import pygame
-from assets.managers import constants
-from assets.managers import projectile, common
-import random
-import os
-
+import pygame, random, os
+from assets.managers import constants, projectile, common
 
 class Item():
     def __init__(self, id, type, texture, on_use, cooldown):

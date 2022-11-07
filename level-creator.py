@@ -1,9 +1,6 @@
 from asyncio import constants
 from dis import dis
-import pygame
-import os
-import pathlib
-import json
+import pygame, os, pathlib, json
 from assets.managers import common
 from util.logging import *
 

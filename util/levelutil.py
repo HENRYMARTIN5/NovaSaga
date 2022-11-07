@@ -1,5 +1,4 @@
-import os
-import pathlib
+import os, pathlib
 from util.logging import *
 
 class LevelReader():

@@ -1,8 +1,5 @@
-import pygame
-from assets.managers import constants
-from assets.managers import common
-import math
-import os
+from assets.managers import constants, common
+import math, pygame, os
 
 
 def new_projectile(projectile):

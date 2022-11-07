@@ -1,7 +1,5 @@
 from assets.managers import common, constants
-import pygame
-import random
-
+import pygame, random
 
 def NewParticle(particle):
     if len(common.particles) == 0:

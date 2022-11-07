@@ -1,9 +1,5 @@
 from assets.managers import constants
-import pygame
-import time
-import os
-import pathlib
-import json
+import pygame, time, os, pathlib, json
 
 
 class Ticker():

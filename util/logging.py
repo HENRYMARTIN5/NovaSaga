@@ -1,6 +1,4 @@
-import sys
-import pygame
-import datetime
+import sys, pygame, datetime
 
 ###########################
 logDebugToConsole = True

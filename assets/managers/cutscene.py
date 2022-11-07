@@ -1,7 +1,5 @@
 from assets.managers import common, constants, entity
-import os
-import pygame
-import pathlib
+import os, pygame, pathlib
 
 
 class TextElement():

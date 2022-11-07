@@ -1,13 +1,6 @@
 import imp
-from assets.managers import constants
-from assets.managers import common
-from assets.managers import animation
-from assets.managers import ai
-import os
-import pathlib
-import pygame
-import math
-import time
+from assets.managers import constants, common, animation, ai
+import os, pathlib, pygame, math, time
 from util.logging import *
 
 
