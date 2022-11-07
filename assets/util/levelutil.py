@@ -1,5 +1,5 @@
 import os, pathlib
-from util.logging import *
+from assets.util.logging import *
 
 class LevelReader():
   def __init__(self, path):

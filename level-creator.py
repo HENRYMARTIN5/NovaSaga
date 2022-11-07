@@ -2,7 +2,7 @@ from asyncio import constants
 from dis import dis
 import pygame, os, pathlib, json
 from assets.managers import common
-from util.logging import *
+from assets.util.logging import *
 
 BLOCK_SIZE = 8
 HALF_BLOCK_SIZE = int(BLOCK_SIZE * 0.5)

@@ -1,4 +1,4 @@
-from util.logging import *
+from assets.util.logging import *
 from pygame import mixer
 import os
 

@@ -1,7 +1,7 @@
 import imp
 from assets.managers import constants, common, animation, ai
 import os, pathlib, pygame, math, time
-from util.logging import *
+from assets.util.logging import *
 
 
 class Entity():

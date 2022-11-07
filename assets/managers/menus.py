@@ -1,7 +1,7 @@
 import pygame
 import os
 from assets.managers import constants, common, level
-from util.logging import *
+from assets.util.logging import *
 
 border_color = (96, 0, 144)
 interior_color = (64, 48, 80)

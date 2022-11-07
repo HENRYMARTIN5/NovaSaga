@@ -1,6 +1,6 @@
 import pygame
 from assets.managers import constants, common
-from util.logging import info, debug
+from assets.util.logging import info, debug
 
 def simple(self):
     self.update_physics()
