@@ -1,4 +1,4 @@
-import math, time, pygame, os, random, json
+import math, time, pygame, os, random, json, asyncio
 from assets.managers import common, entity, constants, ai, menus, items, projectile, level, cutscene
 from assets.managers.music import MusicManager
 from assets.util.logging import *
@@ -58,9 +58,8 @@ def draw():
     constants.disp_win.blit(common.loaded_level.hud, (0, 0))
 
     pygame.display.update()
-
-
-def main():
+    
+async def main():
     clock = pygame.time.Clock()
     isRunning = True
     tick = 0
@@ -116,4 +115,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
