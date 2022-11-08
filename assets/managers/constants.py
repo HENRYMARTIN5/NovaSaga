@@ -50,6 +50,7 @@ else:
 WIN = pygame.transform.scale(disp_win.copy(), (WIDTH, HEIGHT))
 menu_surface = disp_win.copy()
 menu_surface.set_colorkey((0, 0, 0, 0))
+
 DEF_LEVEL = "test_display.png"
 DEF_START_POS = (10 * BLOCK_SIZE, int(19.5 * BLOCK_SIZE))
 PLAYER_VEL = 2
