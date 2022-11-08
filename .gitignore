@@ -7,3 +7,4 @@ musicmanager-test.py
 */__pycache__
 assets/managers/__pycache__
 gitpod
+.VSCodeCounter
