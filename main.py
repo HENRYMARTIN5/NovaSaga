@@ -112,6 +112,7 @@ async def main():
     json.dump(common.Settings, open("settings.json", "w"), indent=4)
     info("Game quit without errors")
     pygame.quit()
+    debug("-------------- End of log --------------")
 
 
 if __name__ == "__main__":

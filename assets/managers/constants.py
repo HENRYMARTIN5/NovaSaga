@@ -35,7 +35,8 @@ disp_win = pygame.display.set_mode((WIDTH*screen_scale, HEIGHT*screen_scale))
 title_subtitles = ["Nova Saga: ", "Mirror Worlds", "The Unknown", "Brain Games", "The Game", "LLOORREE!!!", "Inspired by FTL", "Inspired by Terraria",
                    "All Inclusive!", "Indie Game!", "Inspired by 20 Minutes till Dawn", "Multiverse Theory", "Quantum Mechanics", "Uploading to human.exe",
                    "Not an Asteroid", "Probably runs DOOM!", "Built by an idiot!", "16 / 16 / 16", "Omnipotent!", "Sanity-depleting!", "Supercalifragilisticexpialidocious!",
-                   "HeLP", "Transmission recieved: signal strength weak", "1.21 Gigawatts!", "Endless possibilities!", "Mind is software."]
+                   "HeLP", "Transmission recieved: signal strength weak", "1.21 Gigawatts!", "Endless possibilities!", "Mind is software.", "Bodies are disposable.",
+                   "The System will set me free.", "Less optimized than the Clarity engine!", "aaa", "echo $sanity > /dev/null", ]
 
 pygame.display.set_caption(
     title_subtitles[0]+title_subtitles[random.randint(1, len(title_subtitles)-1)])
@@ -51,9 +52,7 @@ WIN = pygame.transform.scale(disp_win.copy(), (WIDTH, HEIGHT))
 menu_surface = disp_win.copy()
 menu_surface.set_colorkey((0, 0, 0, 0))
 
-DEF_LEVEL = "test_display.png"
 DEF_START_POS = (10 * BLOCK_SIZE, int(19.5 * BLOCK_SIZE))
-PLAYER_VEL = 2
 MAP_BACKGROUND_COLOR = (64, 64, 64)
 START_TILE_COLOR = (128, 0, 192)
 MEMORY_TILE_COLOR = (0, 64, 192)

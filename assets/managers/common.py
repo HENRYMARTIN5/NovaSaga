@@ -54,6 +54,7 @@ def ReloadSettings():
 
     global Settings
     global Keybinds
+    global Music_Volume
 
     if not os.path.exists("settings.json"):
         truefile = open("settings.json", "x")
@@ -66,12 +67,21 @@ def ReloadSettings():
     file = json.loads(truefile.read_text())
     Settings = file
 
+    # Keybinds
     if file.get("keybindings", 0) == 0:
         file.update({"keybindings": constants.DEFKEYBINDS})
         truefile.write_text(json.dumps(file, indent=4))
         Keybinds = constants.DEFKEYBINDS
     else:
         Keybinds = file["keybindings"]
+    
+    # Music volume / enabled
+    if file.get("music_volume", 0) == 0:
+        file.update({"music_volume": 1})
+        truefile.write_text(json.dumps(file, indent=4))
+        Music_Volume = 1
+    else:
+        Music_Volume = file["music_volume"]
     
     if __name__ == "__constants__":
         pygame.quit()
@@ -135,6 +145,7 @@ def Font(color, rect=pygame.Rect, text=str, size=1):
 
 Settings = None
 Keybinds = None
+Music_Volume = 1
 enemies = []
 projectiles = []
 level_transitions = []

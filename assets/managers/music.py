@@ -2,7 +2,7 @@ from assets.util.logging import *
 from pygame import mixer
 import os
 from os.path import exists
-
+from assets.managers import common
 
 class MusicManager:
     def __init__(self):
@@ -11,13 +11,22 @@ class MusicManager:
             self.music = {}
             self.current_music = None
             self.current_track = None
+            self.volume = 1
             self.play_music = True
+            self.reload_settings()
             self.fetch_music("assets/music")
         else:
             self.music = None
             self.current_music = None
             self.current_track = None
+            self.volume = 0
             self.play_music = False
+
+    def reload_settings(self):
+        self.volume = common.Music_Volume
+        # Update volume of current track
+        if self.current_music:
+            self.current_music.set_volume(self.volume)
 
     def fetch_music(self, dir):
         info("Fetching music from " + dir)
@@ -27,6 +36,7 @@ class MusicManager:
                 debug("Found music file " + file)
     
     def play(self, name):
+        self.reload_settings()
         if self.play_music:
             if name + ".wav" in self.music:
                 if self.current_music and self.current_track != name:

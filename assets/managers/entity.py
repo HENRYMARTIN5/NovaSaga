@@ -113,7 +113,8 @@ class Entity():
         )/2, self.overlay.get_height()/2), 64)
         pygame.draw.circle(self.overlay, (64, 64, 64), (self.overlay.get_width(
         )/2, self.overlay.get_height()/2), 32)
-        
+
+        # Load sprites        
         self.palette = pygame.image.load(
             os.path.join(self.texture_path, "palette.png"))
         self.still_anim = self.apply_palette(pygame.image.load(
@@ -134,9 +135,15 @@ class Entity():
             os.path.join(self.texture_path, "falling2.png")), self.palette))
 
         if self.ai_type == "player":
+            # Custom text color for player dialogue
             self.text_color = constants.CHAR_COLORS["nova"]
+
             self.animation_ticks.threshold = 35
+
+            # Inventory
             self.inventory = {"main_1": None, "main_2": None, "main_3": None}
+
+            # Load portraits
             self.portraits.update({"happy": pygame.transform.scale(pygame.image.load(os.path.join(
                 constants.PORTRAIT_PATH, "nova-happy.png")), (32*constants.screen_scale, 32*constants.screen_scale))})
             self.portraits.update({"neutral": pygame.transform.scale(pygame.image.load(os.path.join(
@@ -144,9 +151,11 @@ class Entity():
             self.portraits.update({"sad": pygame.transform.scale(pygame.image.load(os.path.join(
                 constants.PORTRAIT_PATH, "nova-sad.png")), (32*constants.screen_scale, 32*constants.screen_scale))})
 
+            # Create an inventory space
             for i in range(constants.INV_WIDTH*constants.INV_HEIGHT-1):
                 self.inventory.update({"inv_"+str(i): None})
 
+            # Load more sprites that are player-specific
             self.facing_away = False
             self.facing_away_img = self.apply_palette(pygame.image.load(
                 os.path.join(self.texture_path, "away_still.png")), self.palette)
@@ -168,9 +177,11 @@ class Entity():
             self.arm_anim.append(self.apply_palette(pygame.image.load(
                 os.path.join(self.texture_path, "arm7.png")), self.palette))
 
+    # Draw player
     def Draw(self):
         self.Animation(self)
 
+    # Procces collision detection
     def collide(self, side="bottom"):
         collide = 0
 
@@ -206,6 +217,7 @@ class Entity():
 
         return collide
 
+    # Physics stuff
     def update_physics(self, up=False, left=False, right=False):
         self.iframes.Tick()
 
