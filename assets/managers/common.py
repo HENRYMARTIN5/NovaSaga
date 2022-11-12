@@ -59,10 +59,10 @@ def ReloadSettings():
     if not os.path.exists("settings.json"):
         truefile = open("settings.json", "x")
         truefile.close()
-        truefile = pathlib.Path("settings")
+        truefile = pathlib.Path("settings.json")
         truefile.write_text(json.dumps(constants.DEF_SETTINGS, indent=4))
     else:
-        truefile = pathlib.Path("settings")
+        truefile = pathlib.Path("settings.json")
     
     file = json.loads(truefile.read_text())
     Settings = file
