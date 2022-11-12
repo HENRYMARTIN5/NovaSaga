@@ -36,7 +36,8 @@ title_subtitles = ["Nova Saga: ", "Mirror Worlds", "The Unknown", "Brain Games",
                    "All Inclusive!", "Indie Game!", "Inspired by 20 Minutes till Dawn", "Multiverse Theory", "Quantum Mechanics", "Uploading to human.exe",
                    "Not an Asteroid", "Probably runs DOOM!", "Built by an idiot!", "16 / 16 / 16", "Omnipotent!", "Sanity-depleting!", "Supercalifragilisticexpialidocious!",
                    "HeLP", "Transmission recieved: signal strength weak", "1.21 Gigawatts!", "Endless possibilities!", "Mind is software.", "Bodies are disposable.",
-                   "The System will set me free.", "Less optimized than the Clarity engine!", "aaa", "echo $sanity > /dev/null", ]
+                   "The System will set me free.", "Less optimized than the Clarity engine!", "aaa", "echo $sanity > /dev/null", "All Inclusive!", "All Inclusive!", "All Inclusive!",
+                    "All Inclusive!", "All Inclusive!", "All Inclusive!"]
 
 pygame.display.set_caption(
     title_subtitles[0]+title_subtitles[random.randint(1, len(title_subtitles)-1)])

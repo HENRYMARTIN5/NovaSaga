@@ -8,6 +8,5 @@ musicmanager-test.py
 assets/managers/__pycache__
 gitpod
 .VSCodeCounter
-*.spec
 build
 dist
