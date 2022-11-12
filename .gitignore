@@ -10,3 +10,4 @@ gitpod
 .VSCodeCounter
 *.spec
 build
+dist
