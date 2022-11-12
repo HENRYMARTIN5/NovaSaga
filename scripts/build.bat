@@ -11,4 +11,5 @@ echo [NovaBuild] Assets copied, cleaning up...
 del /Q /S dist\assets\*.py
 del /Q /S dist\assets\*.pyc
 del /Q /S dist\assets\util
+rmdir /s /q build
 echo [NovaBuild] Built Nova Saga to /dist successfully!
