@@ -45,6 +45,7 @@ def player_anim(self):
 
         if x_vel == 0:
             self.animation_ticks.Reset()
+            
         elif self.animation_ticks.tick <= 5 and not common.out_of_bounds((self.hitbox.x-1, self.hitbox.y+self.hitbox.h-2)):
             if common.loaded_level.collision.get_at((self.hitbox.x-1, self.hitbox.y+self.hitbox.h-2)) != 0 and common.loaded_level.collision.get_at((self.hitbox.x+self.hitbox.w+1, self.hitbox.y+self.hitbox.h-2)) != 0:
                 image = self.walking_anim[0]
